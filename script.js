@@ -23,9 +23,15 @@ document.addEventListener("DOMContentLoaded", () => {
     notesListDiv.appendChild(notesList);
 
     for (let note of notes) {
-      let listItem = document.createElement("li");
+      const listItem = document.createElement("li");
+      const editButton = document.createElement("button");
+      const deleteButton = document.createElement("button");
+      editButton.textContent = "Edit";
+      deleteButton.textContent = "Delete";
 
       listItem.textContent = note.title;
+      listItem.appendChild(editButton);
+      listItem.appendChild(deleteButton);
       notesList.appendChild(listItem);
     }
   }
