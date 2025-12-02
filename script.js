@@ -6,7 +6,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // array to store all the notes
   let notesArray = [];
+  let currentEditingNoteId = null;
+
   loadFromLocalStorage();
+
   function loadFromLocalStorage() {
     let savedNotes = localStorage.getItem("notes");
     if (savedNotes === null) {
@@ -15,6 +18,33 @@ document.addEventListener("DOMContentLoaded", () => {
       notesArray = JSON.parse(savedNotes);
       renderNotesList(notesArray);
     }
+  }
+
+  function loadNoteForEditing(id) {
+    let noteToEdit = notesArray.find((note) => note.id === id);
+    noteTitle.value = noteToEdit.title;
+    noteContent.value = noteToEdit.content;
+    currentEditingNoteId = id;
+    saveButton.textContent = "Update";
+  }
+
+  function updateExistingNote(id, newTitle, newContent) {
+    // 1. Find the note in the array
+    let noteToUpdate = notesArray.find((note) => note.id === id);
+
+    // 2. Update its properties with the NEW values
+    noteToUpdate.title = newTitle; // Use newTitle
+    noteToUpdate.content = newContent; // Use newContent
+
+    // 3. Save to localStorage
+    saveToLocalStorage(notesArray);
+
+    // 4. Re-render
+    renderNotesList(notesArray);
+
+    // 5. Reset to CREATE mode
+    currentEditingNoteId = null;
+    saveButton.textContent = "Save";
   }
 
   function deleteNote(id) {
@@ -26,6 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
     saveToLocalStorage(notesArray);
     renderNotesList(notesArray);
   }
+
   function renderNotesList(notes) {
     notesListDiv.innerHTML = "";
     let notesList = document.createElement("ul");
@@ -39,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
       deleteButton.textContent = "Delete";
 
       editButton.onclick = () => {
-        updateNote(note.id, note.title, note.content);
+        loadNoteForEditing(note.id);
       };
       deleteButton.onclick = () => {
         deleteNote(note.id);
@@ -72,7 +103,15 @@ document.addEventListener("DOMContentLoaded", () => {
   // save new note
   saveButton.addEventListener("click", (e) => {
     e.preventDefault();
-    createNote(noteTitle.value, noteContent.value);
+    if (currentEditingNoteId === null) {
+      createNote(noteTitle.value, noteContent.value);
+    } else {
+      updateExistingNote(
+        currentEditingNoteId,
+        noteTitle.value,
+        noteContent.value
+      );
+    }
     //clear inputs after saving
     clearInputs();
   });
