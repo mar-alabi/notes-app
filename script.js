@@ -17,6 +17,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function deleteNote(id) {
+    const userConfirmed = confirm("Are you sure you want to delete this note");
+    if (!userConfirmed) {
+      return;
+    }
+    notesArray = notesArray.filter((note) => note.id !== id);
+    saveToLocalStorage(notesArray);
+    renderNotesList(notesArray);
+  }
   function renderNotesList(notes) {
     notesListDiv.innerHTML = "";
     let notesList = document.createElement("ul");
@@ -29,6 +38,12 @@ document.addEventListener("DOMContentLoaded", () => {
       editButton.textContent = "Edit";
       deleteButton.textContent = "Delete";
 
+      editButton.onclick = () => {
+        updateNote(note.id, note.title, note.content);
+      };
+      deleteButton.onclick = () => {
+        deleteNote(note.id);
+      };
       listItem.textContent = note.title;
       listItem.appendChild(editButton);
       listItem.appendChild(deleteButton);
