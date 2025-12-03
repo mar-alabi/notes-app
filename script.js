@@ -96,6 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!userConfirmed) {
       return;
     }
+
     notesArray = notesArray.filter((note) => note.id !== id);
     saveToLocalStorage(notesArray);
     renderNotesList(notesArray);
@@ -159,14 +160,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const listItem = document.createElement("li");
 
       listItem.innerHTML = `
-        <strong>${note.title}</strong>
-        <p>${note.content.slice(0, 40)}...</p>
-        <small>${new Date(note.createdAt).toLocaleString("en-US", {
-          dateStyle: "medium",
-          timeStyle: "short",
-        })}</small>
+        
+          <h3>${note.title}</h3>
+          <p>${note.content.slice(0, 40)}...</p>
+          <small>${new Date(note.createdAt).toLocaleString("en-US", {
+            dateStyle: "medium",
+            timeStyle: "short",
+          })}</small>
+  
       `;
-
+      listItem.classList.add("note-card");
       const actionDiv = document.createElement("div");
       actionDiv.className = "actions";
 

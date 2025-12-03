@@ -3,17 +3,167 @@
 *::after {
   box-sizing: border-box;
 }
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+h1 {
+  color: #2c3e50;
+  margin-bottom: 30px;
+}
+
 textarea {
   resize: none;
 }
+
 ul {
   list-style-type: none;
+  padding: 0;
 }
-.note-card {
-  display: flex;
+/* Form styling */
+form {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  font-family: inherit;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+/* Search field */
+input[type="search"] {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
 }
 button {
-  padding: 0.3rem;
+  padding: 10px 20px;
   border: none;
-  border-radius: 7px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#save-btn {
+  background-color: #3498db;
+  color: white;
+  width: 100%;
+}
+
+#save-btn:hover {
+  background-color: #2980b9;
+}
+
+#sync-btn {
+  background-color: #2ecc71;
+  color: white;
+  margin-top: 20px;
+}
+
+#sync-btn:hover {
+  background-color: #27ae60;
+}
+
+#sync-btn:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+.note-card {
+  background: white;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.note-card h3 {
+  margin: 0 0 10px 0;
+  color: #2c3e50;
+}
+
+.note-card p {
+  margin: 0 0 10px 0;
+  color: #666;
+}
+
+.note-card small {
+  color: #999;
+  font-size: 12px;
+}
+
+.actions {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.actions button {
+  flex: 1;
+  padding: 8px;
+}
+
+.actions button:first-child {
+  background-color: #f39c12;
+  color: white;
+}
+
+.actions button:first-child:hover {
+  background-color: #e67e22;
+}
+
+.actions button:last-child {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.actions button:last-child:hover {
+  background-color: #c0392b;
+}
+
+#sync-message {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #ecf0f1;
+  color: #2c3e50;
+}
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+
+  form {
+    padding: 15px;
+  }
+  textarea {
+    height: 200px;
+  }
 }
