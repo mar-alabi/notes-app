@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const saveButton = document.getElementById("save-btn");
   const notesListDiv = document.getElementById("notes-list-div");
   const searchField = document.getElementById("search-note");
+  const syncButton = document.getElementById("sync-btn");
+  const syncMessage = document.getElementById("sync-message");
 
   // ============================================
   // 2. STATE VARIABLES
@@ -30,8 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
    * @param {string} content
    */
   function createNote(title, content) {
-    let newNote = {
-      id: Date.now().toString(),
+    const newNote = {
+      id: crypto.randomUUID(),
       title: title,
       content: content,
       createdAt: Date.now(),
@@ -47,7 +49,8 @@ document.addEventListener("DOMContentLoaded", () => {
    * @param {string} id - The unique identifier of the note to edit
    */
   function loadNoteForEditing(id) {
-    let noteToEdit = notesArray.find((note) => note.id === id);
+    const noteToEdit = notesArray.find((note) => note.id === id);
+    if (!noteToEdit) return;
     noteTitle.value = noteToEdit.title;
     noteContent.value = noteToEdit.content;
     currentEditingNoteId = id;
@@ -65,6 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateExistingNote(id, newTitle, newContent) {
     // 1. Find the note in the array
     let noteToUpdate = notesArray.find((note) => note.id === id);
+    if (!noteToUpdate) return;
 
     // 2. Update its properties with the NEW values
     noteToUpdate.title = newTitle; // Use newTitle
@@ -107,12 +111,20 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   function loadFromLocalStorage() {
     let savedNotes = localStorage.getItem("notes");
-    if (savedNotes === null) {
-      notesListDiv.textContent = "No notes yet";
-    } else {
-      notesArray = JSON.parse(savedNotes);
+
+    if (!savedNotes) {
+      notesArray = [];
       renderNotesList(notesArray);
+      return;
     }
+
+    try {
+      notesArray = JSON.parse(savedNotes) || [];
+    } catch (e) {
+      notesArray = [];
+    }
+
+    renderNotesList(notesArray);
   }
 
   /**
@@ -132,31 +144,49 @@ document.addEventListener("DOMContentLoaded", () => {
    * Renders array of notes to UI
    * @param {Array} notes
    */
+
   function renderNotesList(notes) {
     notesListDiv.innerHTML = "";
-    let notesList = document.createElement("ul");
-    notesListDiv.appendChild(notesList);
+
+    if (notes.length === 0) {
+      notesListDiv.textContent = "No notes yet";
+      return;
+    }
+
+    const notesList = document.createElement("ul");
 
     for (let note of notes) {
       const listItem = document.createElement("li");
-      const editButton = document.createElement("button");
-      const deleteButton = document.createElement("button");
-      editButton.textContent = "Edit";
-      deleteButton.textContent = "Delete";
 
-      editButton.onclick = () => {
-        loadNoteForEditing(note.id);
-      };
-      deleteButton.onclick = () => {
-        deleteNote(note.id);
-      };
-      listItem.textContent = note.title;
-      listItem.appendChild(editButton);
-      listItem.appendChild(deleteButton);
+      listItem.innerHTML = `
+        <strong>${note.title}</strong>
+        <p>${note.content.slice(0, 40)}...</p>
+        <small>${new Date(note.createdAt).toLocaleString("en-US", {
+          dateStyle: "medium",
+          timeStyle: "short",
+        })}</small>
+      `;
+
+      const actionDiv = document.createElement("div");
+      actionDiv.className = "actions";
+
+      const editButton = document.createElement("button");
+      editButton.textContent = "Edit";
+      editButton.onclick = () => loadNoteForEditing(note.id);
+
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "Delete";
+      deleteButton.onclick = () => deleteNote(note.id);
+
+      actionDiv.appendChild(editButton);
+      actionDiv.appendChild(deleteButton);
+
+      listItem.appendChild(actionDiv);
       notesList.appendChild(listItem);
     }
-  }
 
+    notesListDiv.appendChild(notesList);
+  }
   /**
    * Filters the array and renders notes that match user query to the UI
    * @param {string} userQuery
@@ -166,7 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (userQuery === "") {
       renderNotesList(notesArray);
     } else {
-      let searchedArray = notesArray.filter(
+      const searchedArray = notesArray.filter(
         (note) =>
           note.title.toLowerCase().includes(userQuery) ||
           note.content.toLowerCase().includes(userQuery)
@@ -177,11 +207,51 @@ document.addEventListener("DOMContentLoaded", () => {
   // ============================================
   // 7. HELPER FUNCTIONS
   // ============================================
+  /**
+   * Clears input fields after saving or updating notes
+   */
   function clearInputs() {
     noteTitle.value = "";
     noteContent.value = "";
+    currentEditingNoteId = null;
+    saveButton.textContent = "Save";
   }
 
+  function handleSync() {
+    syncButton.disabled = true;
+    // 1. Update UI to show "Syncing..."
+    syncMessage.textContent = "Syncing...";
+    // 2. Call syncWithAPI(notesArray)
+    syncWithAPI(notesArray)
+      .then(() => {
+        syncMessage.textContent = "Synced!";
+        setTimeout(() => {
+          syncMessage.textContent = "";
+        }, 3000);
+      })
+      .catch((error) => {
+        syncMessage.textContent = `Sync failed: ${error}`;
+      })
+      .finally(() => {
+        syncButton.disabled = false; // Re-enable button
+      });
+  }
+
+  function handleSave() {
+    if (!noteTitle.value.trim() || !noteContent.value.trim()) {
+      alert("Please fill in both fields");
+      return;
+    }
+    if (currentEditingNoteId === null) {
+      createNote(noteTitle.value, noteContent.value);
+    } else {
+      updateExistingNote(
+        currentEditingNoteId,
+        noteTitle.value,
+        noteContent.value
+      );
+    }
+  }
   // ============================================
   // 8. EVENT LISTENERS
   // ============================================
@@ -192,15 +262,7 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   saveButton.addEventListener("click", (e) => {
     e.preventDefault();
-    if (currentEditingNoteId === null) {
-      createNote(noteTitle.value, noteContent.value);
-    } else {
-      updateExistingNote(
-        currentEditingNoteId,
-        noteTitle.value,
-        noteContent.value
-      );
-    }
+    handleSave();
     //clear inputs after saving
     clearInputs();
   });
@@ -215,17 +277,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
   noteContent.addEventListener("keypress", (e) => {
     if (e.key === "Enter" && e.ctrlKey) {
-      if (currentEditingNoteId === null) {
-        createNote(noteTitle.value, noteContent.value);
-      } else {
-        updateExistingNote(
-          currentEditingNoteId,
-          noteTitle.value,
-          noteContent.value
-        );
-      }
+      handleSave();
       //clear inputs after saving
       clearInputs();
     }
   });
+
+  syncButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    handleSync();
+  });
+  // ============================================
+  // 9.API FUNCTIONS
+  // ============================================
+
+  /**
+   * Simulates mock API for backend syncing
+   * @param {*} notes
+   * @returns
+   */
+  function syncWithAPI(notes) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        // Simulate network delay (2 seconds)
+        let syncValue = Math.random();
+        // Simulate success 90% of the time, failure 10%
+        // How would you generate a random number to decide this?
+
+        if (syncValue < 0.1) {
+          reject("Failure");
+        } else {
+          resolve({ Success: true, Notes: notes });
+        }
+      }, 2000); // 2 second delay
+    });
+  }
 });
