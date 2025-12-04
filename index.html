@@ -7,34 +7,49 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <h1>Notty</h1>
-    <form action="">
+    <div class="container">
+      <header>
+        <h1>Notty</h1>
+      </header>
+
+      <!-- FORM -->
+      <form>
+        <input
+          type="text"
+          name="note-title"
+          id="note-title"
+          placeholder="Title:"
+        />
+
+        <textarea
+          name="note-content"
+          id="note-content"
+          placeholder="Content:"
+          rows="10"
+        ></textarea>
+
+        <button id="save-btn">Save</button>
+      </form>
+
+      <!-- SEARCH -->
       <input
-        type="text"
-        name="note-title"
-        id="note-title"
-        placeholder="Title:"
+        type="search"
+        name="search-note"
+        id="search-note"
+        placeholder="Search notes..."
+        class="search-input"
       />
-      <br />
-      <textarea
-        name="note-content"
-        id="note-content"
-        placeholder="Content:"
-        rows="20"
-        cols="50"
-      ></textarea
-      ><br />
-      <button id="save-btn">Save</button>
-    </form>
-    <input
-      type="search"
-      name="search-note"
-      id="search-note"
-      placeholder="Search"
-    />
-    <div id="notes-list-div"></div>
-    <button id="sync-btn">Sync</button>
-    <span id="sync-message"></span>
+
+      <!-- NOTES GRID -->
+      <div id="notes-list-div"></div>
+
+      <!-- SYNC -->
+      <div class="sync-area">
+        <button id="sync-btn">Sync</button>
+        <span id="sync-message"></span>
+      </div>
+    </div>
+
     <script src="script.js"></script>
   </body>
 </html>

@@ -1,3 +1,4 @@
+/* RESET --------------------------------------------------------- */
 *,
 *::before,
 *::after {
@@ -6,74 +7,84 @@
 
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f5f5f5;
+  background-color: #f0f2f5;
+  margin: 0;
+  padding: 0;
   color: #333;
 }
 
+/* CONTAINER ------------------------------------------------------ */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* HEADER --------------------------------------------------------- */
 h1 {
+  text-align: center;
   color: #2c3e50;
-  margin-bottom: 30px;
+  font-size: 2.3rem;
+  margin-bottom: 25px;
 }
 
-textarea {
-  resize: none;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-/* Form styling */
+/* FORM ----------------------------------------------------------- */
 form {
   background: white;
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 input[type="text"],
 textarea {
   width: 100%;
-  padding: 12px;
-  margin-bottom: 15px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 14px;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
   font-size: 16px;
-  font-family: inherit;
+  background: #fafafa;
 }
 
 input[type="text"]:focus,
 textarea:focus {
   outline: none;
   border-color: #3498db;
+  background: white;
 }
 
-/* Search field */
-input[type="search"] {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 20px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 16px;
+textarea {
+  resize: none;
 }
+
+/* SEARCH --------------------------------------------------------- */
+.search-input {
+  padding: 14px;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-bottom: 25px;
+}
+
+/* SAVE & SYNC BUTTONS ------------------------------------------- */
 button {
-  padding: 10px 20px;
+  padding: 12px;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: 0.2s ease;
+  font-weight: 500;
 }
 
 #save-btn {
   background-color: #3498db;
   color: white;
-  width: 100%;
 }
 
 #save-btn:hover {
@@ -83,7 +94,7 @@ button {
 #sync-btn {
   background-color: #2ecc71;
   color: white;
-  margin-top: 20px;
+  min-width: 120px;
 }
 
 #sync-btn:hover {
@@ -94,38 +105,57 @@ button {
   background-color: #95a5a6;
   cursor: not-allowed;
 }
+
+.sync-area {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+/* NOTES CONTAINER ----------------------------------------------------- */
+.notes-container {
+  display: flex;
+  max-width: 1000px;
+  gap: 10px;
+}
+/* NOTE CARD ------------------------------------------------------ */
 .note-card {
   background: white;
-  padding: 15px;
-  margin-bottom: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 18px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
 }
 
 .note-card h3 {
-  margin: 0 0 10px 0;
+  margin: 0 0 8px 0;
   color: #2c3e50;
 }
 
 .note-card p {
-  margin: 0 0 10px 0;
-  color: #666;
+  margin: 0 0 12px 0;
+  color: #555;
+  line-height: 1.4;
 }
 
 .note-card small {
-  color: #999;
+  color: #888;
   font-size: 12px;
 }
 
+/* ACTION BUTTONS ------------------------------------------------ */
 .actions {
-  margin-top: 15px;
+  margin-top: auto;
   display: flex;
   gap: 10px;
 }
 
 .actions button {
   flex: 1;
-  padding: 8px;
+  padding: 10px;
+  border-radius: 6px;
 }
 
 .actions button:first-child {
@@ -146,24 +176,26 @@ button {
   background-color: #c0392b;
 }
 
+/* SYNC MESSAGE -------------------------------------------------- */
 #sync-message {
-  display: inline-block;
-  margin-left: 10px;
-  padding: 5px 10px;
-  border-radius: 4px;
-  font-size: 14px;
   background-color: #ecf0f1;
   color: #2c3e50;
+  padding: 6px 12px;
+  border-radius: 6px;
+  min-height: 20px;
+  display: inline-block;
 }
+
+/* MOBILE --------------------------------------------------------- */
 @media (max-width: 600px) {
-  body {
-    padding: 10px;
+  .container {
+    padding: 15px;
   }
 
   form {
     padding: 15px;
   }
-  textarea {
-    height: 200px;
+  .notes-container {
+    flex-direction: column;
   }
 }

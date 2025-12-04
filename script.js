@@ -155,6 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const notesList = document.createElement("ul");
+    notesList.classList.add("notes-container");
 
     for (let note of notes) {
       const listItem = document.createElement("li");
