@@ -155,7 +155,12 @@ document.addEventListener("DOMContentLoaded", () => {
     notesListDiv.innerHTML = "";
 
     if (notes.length === 0) {
-      notesListDiv.textContent = "No notes yet";
+      notesListDiv.innerHTML = `
+      <div class="empty-state">
+      <p>No notes yet</p>
+      <small>Click 'Create Note' to get started</small>
+      </div>`;
+      syncButton.style.display = "none";
       return;
     }
 

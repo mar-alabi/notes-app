@@ -137,6 +137,11 @@ button {
   gap: 10px;
   flex-wrap: wrap;
 }
+
+.empty-state {
+  color: #888;
+  text-align: center;
+}
 /* NOTE CARD ------------------------------------------------------ */
 .note-card {
   background: white;
