@@ -156,10 +156,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (notes.length === 0) {
       notesListDiv.innerHTML = `
-      <div class="empty-state">
+      <div>
       <p>No notes yet</p>
       <small>Click 'Create Note' to get started</small>
       </div>`;
+      notesListDiv.className = "empty-state";
       syncButton.style.display = "none";
       return;
     }
