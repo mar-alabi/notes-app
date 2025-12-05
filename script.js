@@ -156,15 +156,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (notes.length === 0) {
       notesListDiv.innerHTML = `
-      <div>
+    <div class="empty-state">
+      <span class="empty-icon">📝</span>
       <p>No notes yet</p>
       <small>Click 'Create Note' to get started</small>
-      </div>`;
-      notesListDiv.className = "empty-state";
+    </div>`;
       syncButton.style.display = "none";
       return;
     }
 
+    // When there ARE notes:
+    notesListDiv.className = ""; // Remove empty-state class
+    syncButton.style.display = "block";
     const notesList = document.createElement("ul");
     notesList.classList.add("notes-container");
 
