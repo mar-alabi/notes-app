@@ -104,11 +104,13 @@ button {
 
 #cancel-btn:hover {
   background-color: #c0392b;
-}
-#save-btn:hover {
-  background-color: #2980b9;
+  transform: scale(1.05);
 }
 
+#save-btn:hover {
+  background-color: #2980b9;
+  transform: scale(1.05); /* Add this */
+}
 #sync-btn,
 #create-btn {
   background-color: #2ecc71;
@@ -119,6 +121,7 @@ button {
 #sync-btn:hover,
 #create-btn:hover {
   background-color: #27ae60;
+  transform: scale(1.05);
 }
 
 #sync-btn:disabled {
@@ -221,6 +224,7 @@ button {
 
 .actions button:first-child:hover {
   background-color: #e67e22;
+  transform: scale(1.05);
 }
 
 .actions button:last-child {
@@ -230,6 +234,7 @@ button {
 
 .actions button:last-child:hover {
   background-color: #c0392b;
+  transform: scale(1.05);
 }
 
 /* SYNC MESSAGE -------------------------------------------------- */
